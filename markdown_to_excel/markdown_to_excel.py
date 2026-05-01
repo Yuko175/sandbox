@@ -1,14 +1,13 @@
 """Markdownを見出しレベルごとに列をずらしてExcelに変換する。"""
 
-from __future__ import annotations
-
 import argparse
 import re
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
+
 
 # Markdownの見出し（#〜######）を検出する正規表現
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
@@ -115,7 +114,7 @@ def build_heading_text(
 def handle_heading_line(
     row: int,
     match: re.Match,
-    current_heading_col: Optional[int],
+    current_heading_col: int | None,
     body_lines: List[str],
     max_col: int,
     heading_counters: List[int],
@@ -194,7 +193,7 @@ def convert_markdown_to_excel(input_path: str, output_path: str) -> None:
 
     # 書き込み位置などの状態を初期化する
     row = START_ROW
-    current_heading_col: Optional[int] = None
+    current_heading_col: int | None = None
     body_lines: List[str] = []
     max_col = 1
     heading_counters = [0, 0, 0, 0, 0, 0]
