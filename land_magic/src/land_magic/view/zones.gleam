@@ -46,21 +46,11 @@ pub fn hand_zone(cards: List(Land), active: Bool, prompt: Prompt, playable: Bool
         }
     }
 
-  let counter_select_enabled =
-    case prompt {
-      CounterSelecting(_, _) -> True
-      _ -> False
-    }
-
   html.div(
     [attribute.classes([#("zone", True), #("hand-zone", True)])],
     [
       html.h3([], [html.text("手札 (" <> int.to_string(list.length(cards)) <> ")")]),
       html.div([attribute.classes([#("card-row", True)])], cards_view),
-      case active && counter_select_enabled {
-        True -> html.p([], [html.text("島を含む2枚を選んでください。")])
-        False -> html.text("")
-      },
     ],
   )
 }
@@ -98,11 +88,13 @@ pub fn zone_view(label: String, cards: List(Land), zone_class: String) -> Elemen
 }
 
 pub fn graveyard_zone(cards: List(Land), active: Bool, prompt: Prompt) -> Element(Msg) {
-  let cards_view =
+  let plains_active =
     case prompt {
-      ChoosePlainsTarget(_) if active -> cards.render_graveyard_buttons(cards)
-      _ -> cards.render_static_cards(cards)
+      ChoosePlainsTarget(_) if active -> True
+      _ -> False
     }
+
+  let cards_view = cards.render_graveyard_buttons(cards, plains_active)
 
   html.div(
     [attribute.classes([#("zone", True), #("graveyard-zone", True)])],

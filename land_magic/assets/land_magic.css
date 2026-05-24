@@ -9,6 +9,8 @@
   --accent-gold: #ddc16d;
   --radius-lg: 24px;
   --radius-md: 18px;
+  --card-width: 90px;
+  --card-height: calc(var(--card-width) * 2 / 3);
 }
 
 * {
@@ -258,6 +260,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  height: 80%;
 }
 
 .hand-zone .card-row {
@@ -267,9 +270,7 @@ body {
 .card-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 0.85rem;
   letter-spacing: 0.02em;
@@ -280,11 +281,13 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  aspect-ratio: 2 / 3;
 }
 
 .card-chip .card-image {
   width: 40px;
-  height: 24px;
+  height: auto;
+  aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.25);
@@ -296,9 +299,9 @@ body {
 }
 
 .card-chip-button.selected {
-  box-shadow: 0 0 0 3px rgba(130, 190, 240, 0.18);
-  border-color: rgba(130, 190, 240, 0.6);
-  background: rgba(130, 190, 240, 0.04);
+  box-shadow: 0 0 0 6px rgba(109, 201, 140, 0.08);
+  border: 3px solid rgba(109, 201, 140, 0.4);
+  background: rgba(109, 201, 140, 0.04);
 }
 
 .card-chip-button {
@@ -314,18 +317,103 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: clamp(120px, 18vw, 190px);
-  min-width: 120px;
-  max-width: 230px;
-  padding: 8px;
-  border-radius: 20px;
+  width: var(--card-width);
+  min-width: var(--card-width);
+  max-width: var(--card-width);
+  height: var(--card-height);
+  padding: 6px;
+  border-radius: 0;
+}
+
+/* Make battlefield cards the same size as hand cards */
+.battlefield-zone .card-chip-button {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: var(--card-width);
+  min-width: var(--card-width);
+  max-width: var(--card-width);
+  height: var(--card-height);
+  padding: 6px;
+  border-radius: 0;
+}
+
+.battlefield-zone .card-row,
+.hand-zone .card-row {
+  align-items: flex-start;
+  min-height: calc(var(--card-height) + 12px);
 }
 
 .hand-zone .card-chip-button .card-image {
   width: 100%;
-  aspect-ratio: 3 / 2;
   height: auto;
-  border-radius: 12px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* Graveyard: ensure five items fit horizontally */
+.graveyard-zone .card-row .card-chip-button {
+  flex: 0 0 calc((100% - 40px) / 5);
+  min-width: 0;
+}
+
+/* Make outer button corners square everywhere */
+.card-chip-button,
+.card-chip {
+  border-radius: 0 !important;
+}
+
+/* Remove card-label usage; if any remain, hide them globally */
+.card-label {
+  display: none !important;
+}
+
+/* Hide legacy img elements with class card-image (we use background images now) */
+.card-image {
+  display: none !important;
+}
+
+/* Ensure any card with an image keeps 3:2 ratio across contexts */
+.card-chip.with-image .card-image,
+.card-chip-button.with-image .card-image,
+.card-chip.island.with-image .card-image,
+.card-chip-button.island.with-image .card-image {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* Ensure .card-chip (span) and .card-chip-button (button) share the same frame when using inline images */
+.card-chip,
+.card-chip-button {
+  width: var(--card-width);
+  min-width: var(--card-width);
+  max-width: var(--card-width);
+  height: var(--card-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* For image-driven cards, disable background-image to avoid double visuals */
+.card-chip.with-image,
+.card-chip-button.with-image {
+  background-image: none !important;
+}
+
+/* Keep disabled buttons same size */
+.card-chip-button:disabled .card-image,
+.card-chip-button:disabled {
+  aspect-ratio: 2 / 3;
+}
+
+/* Hide card labels in hand and battlefield zones */
+.hand-zone .card-label,
+.battlefield-zone .card-label {
+  display: none;
 }
 
 .hand-zone .card-chip-button .card-label {
@@ -525,33 +613,65 @@ body {
 .card-chip.swamp,
 .card-chip.mountain,
 .card-chip.forest {
-  background: var(--land-bg);
   border-color: var(--land-border);
 }
 
 .card-chip.plains,
 .card-chip-button.plains {
   background-image: url("images/plain.jpg");
+  height: 100%;
+  width: auto;
 }
 
 .card-chip.island,
 .card-chip-button.island {
   background-image: url("images/island.jpg");
+  height: 100%;
+  width: auto;
 }
 
 .card-chip.swamp,
 .card-chip-button.swamp {
   background-image: url("images/swamp.jpg");
+  height: 100%;
+  width: auto;
 }
 
 .card-chip.mountain,
 .card-chip-button.mountain {
   background-image: url("images/mountain.jpg");
+  height: 100%;
+  width: auto;
 }
 
 .card-chip.forest,
 .card-chip-button.forest {
   background-image: url("images/forest.jpg");
+  height: 100%;
+  width: auto;
+}
+
+/* Consolidated: ensure all land-type card elements keep image sizing consistent */
+.card-chip.plains,
+.card-chip-button.plains,
+.card-chip.island,
+.card-chip-button.island,
+.card-chip.swamp,
+.card-chip-button.swamp,
+.card-chip.mountain,
+.card-chip-button.mountain,
+.card-chip.forest,
+.card-chip-button.forest {
+  height: 100%;
+  width: auto;
+}
+
+/* Apply same sizing to facedown/back elements */
+.card-chip.facedown,
+.card-chip-button.facedown {
+  background-image: url("images/back.jpg");
+  height: 100%;
+  width: auto;
 }
 
 @media (max-width: 960px) {

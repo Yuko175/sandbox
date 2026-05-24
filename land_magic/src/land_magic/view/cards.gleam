@@ -63,8 +63,8 @@ pub fn render_destroy_battlefield_cards(cards: List(Land), index: Int, owner: Tu
   }
 }
 
-pub fn render_graveyard_buttons(cards: List(Land)) -> List(Element(Msg)) {
-  graveyard_buttons(cards, [Plains, Island, Swamp, Mountain, Forest])
+pub fn render_graveyard_buttons(cards: List(Land), enabled: Bool) -> List(Element(Msg)) {
+  graveyard_buttons(cards, [Plains, Island, Swamp, Mountain, Forest], enabled)
 }
 
 pub fn land_chip(land: Land) -> Element(Msg) {
@@ -72,7 +72,6 @@ pub fn land_chip(land: Land) -> Element(Msg) {
     [attribute.classes([#("card-chip", True), #(land_class(land), True)]), attribute.title(land_name(land))],
     [
       html.img([attribute.classes([#("card-image", True)]), attribute.src(image_src(land)), attribute.alt(land_name(land))]),
-      html.span([attribute.classes([#("card-label", True)])], [html.text(land_name(land))]),
     ],
   )
 }
@@ -82,7 +81,6 @@ pub fn facedown_chip() -> Element(Msg) {
     [attribute.classes([#("card-chip", True), #("facedown", True)]), attribute.title("伏せカード")],
     [
       html.img([attribute.classes([#("card-image", True)]), attribute.src(back_image_src()), attribute.alt("伏せカード")]),
-      html.span([attribute.classes([#("card-label", True)])], [html.text("？")]),
     ],
   )
 }
@@ -103,32 +101,27 @@ pub fn hand_card_button(land: Land, message: Msg, selected: Bool) -> Element(Msg
     ],
     [
       html.img([attribute.classes([#("card-image", True)]), attribute.src(image_src(land)), attribute.alt(land_name(land))]),
-      html.span([attribute.classes([#("card-label", True)])], [html.text(land_name(land))]),
     ],
   )
 }
 
-fn graveyard_buttons(cards: List(Land), targets: List(Land)) -> List(Element(Msg)) {
+fn graveyard_buttons(cards: List(Land), targets: List(Land), enabled: Bool) -> List(Element(Msg)) {
   case targets {
     [] -> []
     [target, ..rest] ->
-      case render_graveyard_button(cards, target, 0) {
-        [] -> graveyard_buttons(cards, rest)
-        [button, .._] -> [button, ..graveyard_buttons(cards, rest)]
-      }
+      [
+        graveyard_card_button(
+          target,
+          land_count(cards, target),
+          ReturnFromGraveyard(first_index_of(cards, target, 0)),
+          enabled && land_count(cards, target) > 0,
+        ),
+        ..graveyard_buttons(cards, rest, enabled),
+      ]
   }
 }
 
-fn render_graveyard_button(cards: List(Land), target: Land, start_index: Int) -> List(Element(Msg)) {
-  let count = land_count(cards, target)
-
-  case count > 0 {
-    True -> [graveyard_card_button(target, count, ReturnFromGraveyard(first_index_of(cards, target, start_index)))]
-    False -> []
-  }
-}
-
-fn graveyard_card_button(land: Land, count: Int, message: Msg) -> Element(Msg) {
+fn graveyard_card_button(land: Land, count: Int, message: Msg, enabled: Bool) -> Element(Msg) {
   html.button(
     [
       attribute.classes([
@@ -139,11 +132,13 @@ fn graveyard_card_button(land: Land, count: Int, message: Msg) -> Element(Msg) {
         #(land_class(land), True),
       ]),
       attribute.title(land_name(land)),
+      attribute.disabled(!enabled),
+      // keep on_click even if disabled; disabled prevents activation
       event.on_click(message),
     ],
     [
       html.img([attribute.classes([#("card-image", True)]), attribute.src(image_src(land)), attribute.alt(land_name(land))]),
-      html.span([attribute.classes([#("card-label", True)])], [html.text("×" <> int.to_string(count))]),
+      html.span([], [html.text("×" <> int.to_string(count))]),
     ],
   )
 }
