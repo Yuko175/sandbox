@@ -70,6 +70,36 @@ body {
   gap: 12px;
 }
 
+.board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.82fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.playfield {
+  display: grid;
+  gap: 18px;
+}
+
+.sidebar {
+  display: grid;
+  gap: 18px;
+  align-self: start;
+  position: sticky;
+  top: 24px;
+}
+
+.settings-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.log-panel {
+  display: grid;
+  gap: 12px;
+}
+
 .panel {
   padding: 20px;
   border: 1px solid var(--panel-border);
@@ -168,12 +198,52 @@ body {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
+.player-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.player-panel-top .zone-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(140px, 0.48fr) minmax(0, 1fr);
+  grid-template-areas:
+    "deck hand"
+    "graveyard battlefield";
+}
+
+.player-panel-bottom .zone-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 0.48fr);
+  grid-template-areas:
+    "battlefield deck"
+    "hand graveyard";
+}
+
+.deck-zone {
+  grid-area: deck;
+}
+
+.hand-zone {
+  grid-area: hand;
+}
+
+.graveyard-zone {
+  grid-area: graveyard;
+}
+
+.battlefield-zone {
+  grid-area: battlefield;
+}
+
 .zone {
-  margin-top: 14px;
+  margin-top: 0;
   padding: 14px;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 110px;
 }
 
 .zone h3 {
@@ -344,6 +414,19 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .board-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .player-panel-top .zone-grid,
+  .player-panel-bottom .zone-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .battlefield-choice {
     grid-template-columns: 1fr;
   }
@@ -356,5 +439,23 @@ body {
 
   .action-button {
     width: 100%;
+  }
+
+  .player-panel-top .zone-grid,
+  .player-panel-bottom .zone-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "deck"
+      "hand"
+      "graveyard"
+      "battlefield";
+  }
+
+  .player-panel-bottom .zone-grid {
+    grid-template-areas:
+      "battlefield"
+      "hand"
+      "deck"
+      "graveyard";
   }
 }

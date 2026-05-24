@@ -1,0 +1,49 @@
+<mxfile host="65bd71144e">
+    <diagram id="x3iwXBqSVeVQsrXlXxnV" name="ページ1">
+        <mxGraphModel dx="924" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="40" width="640" height="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="130" y="220" width="440" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="130" y="50" width="440" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="手札&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player1)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="320" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="山札&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player1)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="520" y="320" width="40" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="墓地&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player1)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="520" y="240" width="40" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="戦場&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player1)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="240" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="山札&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player2)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="60" width="40" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="墓地&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player2)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="140" width="40" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="手札&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;(player2)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="60" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="戦場(player2)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="140" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="設定値" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="585" y="50" width="165" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="アクションログ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="585" y="230" width="165" height="160" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
