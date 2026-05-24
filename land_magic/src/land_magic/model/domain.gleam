@@ -1,4 +1,4 @@
-import land_magic/types.{type Land, type Turn, Plains, Island, Swamp, Mountain, Forest, PlayerOne, PlayerTwo}
+import land_magic/model/types.{type Land, type Turn, Plains, Island, Swamp, Mountain, Forest, PlayerOne, PlayerTwo}
 
 pub fn other_turn(turn: Turn) -> Turn {
   case turn {

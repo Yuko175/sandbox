@@ -1,5 +1,5 @@
-import land_magic/domain.{other_turn}
-import land_magic/types.{type Model, type Player, type Turn, PlayerOne, PlayerTwo, Model}
+import land_magic/model/domain.{other_turn}
+import land_magic/model/types.{type Model, type Player, type Turn, PlayerOne, PlayerTwo, Model}
 
 pub fn current_player(model: Model) -> Player {
   player_by_turn(model, model.turn)

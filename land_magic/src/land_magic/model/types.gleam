@@ -24,6 +24,7 @@ pub type Player {
 pub type Prompt {
   ChoosePlay
   CounterWindow(card: Land)
+  CounterSelecting(card: Land, selected: List(Int))
   ChoosePlainsTarget(card: Land)
   ChooseSwampTarget(card: Land)
   ChooseMountainTarget(card: Land)
@@ -56,11 +57,13 @@ pub type Winner {
 pub type Msg {
   ResetGame
   PlayCard(Int)
-  CounterWithIsland(Int)
+  BeginCounterSelection
+  SelectCounterCard(Int)
   PassCounter
   ReturnFromGraveyard(Int)
   DiscardOpponentCard(Int)
   DestroyFromBattlefield(Turn, Int)
   DrawForForest
+  DrawFromDeck
   FinishTurn
 }

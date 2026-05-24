@@ -1,5 +1,5 @@
-import land_magic/game
-import land_magic/view
+import land_magic/game/main as game
+import land_magic/view/main as view
 import lustre
 
 pub fn main() -> Nil {
