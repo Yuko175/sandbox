@@ -22,6 +22,7 @@ pub type Player {
 }
 
 pub type Prompt {
+  DrawTurnCard
   ChoosePlay
   CounterWindow(card: Land)
   CounterSelecting(card: Land, selected: List(Int))

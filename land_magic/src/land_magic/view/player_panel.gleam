@@ -1,11 +1,11 @@
-import land_magic/model/types.{type Player, type Prompt, type Msg}
+import land_magic/model/types.{type Player, type Prompt, type Msg, type Turn, EndTurnReady, FinishTurn}
 import land_magic/view/common
 import land_magic/view/zones
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
-pub fn player_panel(player: Player, active: Bool, top: Bool, prompt: Prompt, can_play: Bool, can_draw: Bool) -> Element(Msg) {
+pub fn player_panel(player: Player, turn: Turn, active: Bool, top: Bool, prompt: Prompt, can_play: Bool, can_draw: Bool) -> Element(Msg) {
   html.section(
     [
       attribute.classes([
@@ -30,11 +30,28 @@ pub fn player_panel(player: Player, active: Bool, top: Bool, prompt: Prompt, can
         ]),
         html.p([], [html.text(common.zone_summary(player))]),
       ]),
+      case active {
+        True ->
+          html.p(
+            [attribute.classes([#("panel-hint", True)])],
+            [html.text(common.prompt_detail(prompt))],
+          )
+
+        False -> html.text("")
+      },
+      case active && prompt == EndTurnReady {
+        True ->
+          html.div([attribute.classes([#("action-grid", True)])], [
+            common.button_control("primary", "ターン終了", FinishTurn, True),
+          ])
+
+        False -> html.text("")
+      },
       html.div([attribute.classes([#("zone-grid", True), #(common.player_board_class(top), True)])], [
         zones.deck_zone(player.deck, active && can_draw),
         zones.hand_zone(player.hand, active, prompt, can_play),
-        zones.zone_view("墓地", player.graveyard, "graveyard-zone"),
-        zones.zone_view("戦場", player.battlefield, "battlefield-zone"),
+        zones.graveyard_zone(player.graveyard, active, prompt),
+        zones.battlefield_zone(player.battlefield, prompt, active, turn),
       ]),
     ],
   )

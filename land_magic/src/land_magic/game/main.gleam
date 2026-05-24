@@ -19,6 +19,7 @@ import land_magic/model/types.{
   PlayerOne,
   PlayerTwo,
   Player,
+  DrawTurnCard,
   ChoosePlay,
   CounterWindow,
   CounterSelecting,
@@ -53,7 +54,7 @@ pub fn init(_args: Nil) -> Model {
     player_one: player_one,
     player_two: player_two,
     turn: PlayerOne,
-    prompt: ChoosePlay,
+    prompt: DrawTurnCard,
     log: [
       "新しいゲームを開始しました。",
       "手札は公開され、すべての選択は手動です。",
@@ -89,8 +90,8 @@ pub fn update(model: Model, msg: Msg) -> Model {
 
     PassCounter ->
       case model.prompt {
-        CounterWindow(card) -> island_card.pass_counter(model, card)
-        CounterSelecting(card, _) -> island_card.pass_counter(model, card)
+        CounterWindow(card) -> resolve_played_card(island_card.pass_counter(model, card), card)
+        CounterSelecting(card, _) -> resolve_played_card(island_card.pass_counter(model, card), card)
         _ -> model
       }
 
@@ -120,6 +121,11 @@ pub fn update(model: Model, msg: Msg) -> Model {
 
     DrawFromDeck ->
       case model.prompt {
+        DrawTurnCard -> {
+          let model = setup.draw_turn_card(model)
+          Model(..model, prompt: ChoosePlay)
+        }
+
         ChooseForestDraw(_) -> forest_card.resolve_draw(model)
         _ -> model
       }
@@ -147,26 +153,22 @@ fn play_card(model: Model, index: Int) -> Model {
       )
 
       case rules.has_counter_cost(opponent_player(model).hand) {
-        True -> Model(..model, turn: other_turn(model.turn), prompt: CounterWindow(card))
-        False -> resolve_play(model, card)
+        True -> {
+          let current = Player(..current, battlefield: [card, ..current.battlefield])
+          let model = set_current_player(model, current)
+
+          Model(..model, turn: other_turn(model.turn), prompt: CounterWindow(card))
+        }
+        False -> {
+          let current = Player(..current, battlefield: [card, ..current.battlefield])
+          let model = set_current_player(model, current)
+
+          Model(..model, turn: other_turn(model.turn), prompt: CounterWindow(card))
+        }
       }
     }
 
     _ -> model
-  }
-}
-
-fn resolve_play(model: Model, card: Land) -> Model {
-  let current = current_player(model)
-  let current = Player(..current, battlefield: [card, ..current.battlefield])
-  let model = set_current_player(model, current)
-
-  case card {
-    Plains -> plains_card.resolve_on_play(model, card)
-    Island -> island_card.resolve_on_play(model, card)
-    Swamp -> swamp_card.resolve_on_play(model, card)
-    Mountain -> mountain_card.resolve_on_play(model, card)
-    Forest -> forest_card.resolve_on_play(model, card)
   }
 }
 
@@ -187,7 +189,17 @@ fn end_turn(model: Model) -> Model {
   }
 }
 
+fn resolve_played_card(model: Model, card: Land) -> Model {
+  case card {
+    Plains -> plains_card.resolve_on_play(model, card)
+    Island -> island_card.resolve_on_play(model, card)
+    Swamp -> swamp_card.resolve_on_play(model, card)
+    Mountain -> mountain_card.resolve_on_play(model, card)
+    Forest -> forest_card.resolve_on_play(model, card)
+  }
+}
+
 fn begin_turn(model: Model) -> Model {
   let model = rules.log_action(model, turn_name(model.turn) <> "のターン開始。")
-  setup.draw_turn_card(model)
+  Model(..model, prompt: DrawTurnCard)
 }

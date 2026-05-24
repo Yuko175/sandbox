@@ -1,5 +1,5 @@
 import land_magic/model/domain.{land_class, land_name}
-import land_magic/model/types.{type Land, type Msg, PlayCard, SelectCounterCard}
+import land_magic/model/types.{type Land, type Msg, PlayCard, SelectCounterCard, ReturnFromGraveyard, DiscardOpponentCard, DestroyFromBattlefield, type Turn}
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -32,10 +32,47 @@ pub fn render_counter_hand_cards(cards: List(Land), index: Int) -> List(Element(
   }
 }
 
+pub fn render_return_hand_cards(cards: List(Land), index: Int) -> List(Element(Msg)) {
+  case cards {
+    [] -> []
+    [card, ..rest] -> [
+      hand_card_button(card, ReturnFromGraveyard(index)),
+      ..render_return_hand_cards(rest, index + 1)
+    ]
+  }
+}
+
+pub fn render_discard_hand_cards(cards: List(Land), index: Int) -> List(Element(Msg)) {
+  case cards {
+    [] -> []
+    [card, ..rest] -> [
+      hand_card_button(card, DiscardOpponentCard(index)),
+      ..render_discard_hand_cards(rest, index + 1)
+    ]
+  }
+}
+
+pub fn render_destroy_battlefield_cards(cards: List(Land), index: Int, owner: Turn) -> List(Element(Msg)) {
+  case cards {
+    [] -> []
+    [card, ..rest] -> [
+      hand_card_button(card, DestroyFromBattlefield(owner, index)),
+      ..render_destroy_battlefield_cards(rest, index + 1, owner)
+    ]
+  }
+}
+
 pub fn land_chip(land: Land) -> Element(Msg) {
   html.span(
     [attribute.classes([#("card-chip", True), #(land_class(land), True)]), attribute.title(land_name(land))],
     [html.text(land_name(land))],
+  )
+}
+
+pub fn facedown_chip() -> Element(Msg) {
+  html.span(
+    [attribute.classes([#("card-chip", True), #("facedown", True)]), attribute.title("伏せカード")],
+    [html.text("？")],
   )
 }
 

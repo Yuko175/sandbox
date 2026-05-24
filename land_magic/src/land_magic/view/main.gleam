@@ -1,4 +1,4 @@
-import land_magic/model/types.{type Model, type Msg, PlayerOne, PlayerTwo, ChoosePlay, ChooseForestDraw}
+import land_magic/model/types.{type Model, type Msg, PlayerOne, PlayerTwo, ChoosePlay, ChooseForestDraw, DrawTurnCard}
 import land_magic/view/hero
 import land_magic/view/player_panel
 import land_magic/view/sidebar
@@ -13,6 +13,7 @@ pub fn render(model: Model) -> Element(Msg) {
   }
 
   let draw_enabled = case model.prompt {
+    DrawTurnCard -> True
     ChooseForestDraw(_) -> True
     _ -> False
   }
@@ -29,6 +30,7 @@ pub fn render(model: Model) -> Element(Msg) {
             [
               player_panel.player_panel(
                 model.player_two,
+                PlayerTwo,
                 model.turn == PlayerTwo,
                 True,
                 model.prompt,
@@ -37,6 +39,7 @@ pub fn render(model: Model) -> Element(Msg) {
               ),
               player_panel.player_panel(
                 model.player_one,
+                PlayerOne,
                 model.turn == PlayerOne,
                 False,
                 model.prompt,

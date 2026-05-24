@@ -1,5 +1,4 @@
 import land_magic/game/rules
-import land_magic/game/setup
 import land_magic/model/domain.{land_name, other_turn, turn_name}
 import land_magic/model/types.{
   type Model,
@@ -7,15 +6,15 @@ import land_magic/model/types.{
   Model,
   Player,
   EndTurnReady,
+  DrawTurnCard,
   CounterSelecting,
-  ChoosePlay,
   GameOver,
   HasWinner,
   NoWinner,
   Picked,
   Island,
 }
-import land_magic/state/players.{current_player, set_current_player}
+import land_magic/state/players.{current_player, opponent_player, set_current_player, set_opponent_player}
 
 pub fn begin_counter_selection(model: Model, card: Land) -> Model {
   Model(..model, prompt: CounterSelecting(card, []))
@@ -38,10 +37,9 @@ pub fn select_counter_card(model: Model, card: Land, index: Int) -> Model {
   }
 }
 
-pub fn pass_counter(model: Model, card: Land) -> Model {
+pub fn pass_counter(model: Model, _card: Land) -> Model {
   let model = rules.log_action(model, turn_name(model.turn) <> "は打ち消しをパスしました。")
-  let model = Model(..model, turn: other_turn(model.turn))
-  resolve_on_play(model, card)
+  Model(..model, turn: other_turn(model.turn))
 }
 
 pub fn resolve_on_play(model: Model, card: Land) -> Model {
@@ -65,27 +63,35 @@ fn resolve_counter_selection(model: Model, card: Land, first_index: Int, second_
     False -> first_index
   }
 
+  let attacker = opponent_player(model)
+
   case rules.remove_at(defender.hand, high_index, 0) {
     #(hand_after_high, Picked(high_card)) ->
       case rules.remove_at(hand_after_high, low_index, 0) {
         #(final_hand, Picked(low_card)) ->
           case high_card == Island || low_card == Island {
             True -> {
-              let discarded_card = case high_card == Island {
-                True -> low_card
-                False -> high_card
-              }
               let defender = Player(
                 ..defender,
                 hand: final_hand,
-                graveyard: [discarded_card, high_card, ..defender.graveyard],
+                graveyard: [low_card, high_card, ..defender.graveyard],
               )
+
+              let attacker_battle = case attacker.battlefield {
+                [] -> []
+                [_first, ..rest] -> rest
+              }
+
+              let attacker = Player(..attacker, battlefield: attacker_battle, graveyard: [card, ..attacker.graveyard])
+
               let model = set_current_player(model, defender)
+              let model = set_opponent_player(model, attacker)
+
               let model = rules.log_action(
                 model,
                 turn_name(model.turn)
                   <> "が島と"
-                  <> land_name(discarded_card)
+                  <> land_name(low_card)
                   <> "を捨て、"
                   <> land_name(card)
                   <> "を打ち消しました。",
@@ -113,15 +119,13 @@ fn finish_counter(model: Model) -> Model {
     HasWinner(turn) -> Model(..model, prompt: GameOver(turn))
     NoWinner -> {
       let next_turn = other_turn(model.turn)
-      let model = Model(
+      Model(
         ..model,
         turn: next_turn,
-        prompt: ChoosePlay,
+        prompt: DrawTurnCard,
         turn_number: model.turn_number + 1,
+        log: [turn_name(next_turn) <> "のターン開始。", ..model.log],
       )
-
-      let model = Model(..model, log: [turn_name(model.turn) <> "のターン開始。", ..model.log])
-      setup.draw_turn_card(model)
     }
   }
 }
