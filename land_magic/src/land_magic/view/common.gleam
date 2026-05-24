@@ -84,7 +84,7 @@ pub fn prompt_detail(prompt: Prompt) -> String {
     ChoosePlainsTarget(card) ->
       land_name(card) <> "の効果です。自分の墓地から1枚を選んで手札に戻してください。"
     ChooseSwampTarget(card) ->
-      land_name(card) <> "の効果です。相手の手札から1枚を選んで墓地に置いてください。"
+      land_name(card) <> "の効果です。自分の手札から1枚を選んで墓地に置いてください。"
     ChooseMountainTarget(card) ->
       land_name(card) <> "の効果です。戦場から1枚を選んで破壊してください。"
     ChooseForestDraw(card) ->

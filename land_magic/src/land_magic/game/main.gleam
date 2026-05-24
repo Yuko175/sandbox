@@ -49,6 +49,8 @@ import land_magic/state/players.{current_player, opponent_player, set_current_pl
 pub fn init(_args: Nil) -> Model {
   let player_one = setup.draw_opening_hand(setup.new_player(PlayerOne), 4)
   let player_two = setup.draw_opening_hand(setup.new_player(PlayerTwo), 4)
+  let hand1 = "プレイヤー1の手札: " <> names_to_string(player_one.hand)
+  let hand2 = "プレイヤー2の手札: " <> names_to_string(player_two.hand)
 
   let model = Model(
     player_one: player_one,
@@ -58,6 +60,8 @@ pub fn init(_args: Nil) -> Model {
     log: [
       "新しいゲームを開始しました。",
       "手札は公開され、すべての選択は手動です。",
+      hand1,
+      hand2,
     ],
     turn_number: 1,
   )
@@ -202,4 +206,12 @@ fn resolve_played_card(model: Model, card: Land) -> Model {
 fn begin_turn(model: Model) -> Model {
   let model = rules.log_action(model, turn_name(model.turn) <> "のターン開始。")
   Model(..model, prompt: DrawTurnCard)
+}
+
+fn names_to_string(cards: List(Land)) -> String {
+  case cards {
+    [] -> ""
+    [card] -> land_name(card)
+    [card, ..rest] -> land_name(card) <> ", " <> names_to_string(rest)
+  }
 }

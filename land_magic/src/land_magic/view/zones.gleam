@@ -1,6 +1,5 @@
 import gleam/int
 import gleam/list
-import land_magic/game/rules
 import land_magic/model/types.{
   type Land,
   type Prompt,
@@ -11,12 +10,9 @@ import land_magic/model/types.{
   ChoosePlainsTarget,
   ChooseSwampTarget,
   ChooseMountainTarget,
-  BeginCounterSelection,
-  PassCounter,
   DrawFromDeck,
 }
 import land_magic/view/cards
-import land_magic/view/common
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -33,13 +29,13 @@ pub fn hand_zone(cards: List(Land), active: Bool, prompt: Prompt, playable: Bool
 
       ChooseSwampTarget(_) ->
         case active {
-          True -> cards.render_static_cards(cards)
-          False -> cards.render_discard_hand_cards(cards, 0)
+          True -> cards.render_discard_hand_cards(cards, 0)
+          False -> cards.render_static_cards(cards)
         }
 
-      CounterSelecting(_, _) ->
+      CounterSelecting(_, selected) ->
         case active {
-          True -> cards.render_counter_hand_cards(cards, 0)
+          True -> cards.render_counter_hand_cards(cards, 0, selected)
           False -> cards.render_static_cards(cards)
         }
 
@@ -50,27 +46,11 @@ pub fn hand_zone(cards: List(Land), active: Bool, prompt: Prompt, playable: Bool
         }
     }
 
-  let counter_enabled =
-    case prompt {
-      CounterWindow(_) -> True
-      CounterSelecting(_, _) -> True
-      _ -> False
-    }
-
   let counter_select_enabled =
     case prompt {
       CounterSelecting(_, _) -> True
       _ -> False
     }
-
-  let can_counter = rules.has_counter_cost(cards)
-
-  let footer = [
-    html.div([attribute.classes([#("action-grid", True)])], [
-      common.button_control("secondary", "打ち消し", BeginCounterSelection, active && counter_enabled && can_counter),
-      common.button_control("secondary", "打ち消しパス", PassCounter, active && counter_enabled),
-    ]),
-  ]
 
   html.div(
     [attribute.classes([#("zone", True), #("hand-zone", True)])],
@@ -81,7 +61,6 @@ pub fn hand_zone(cards: List(Land), active: Bool, prompt: Prompt, playable: Bool
         True -> html.p([], [html.text("島を含む2枚を選んでください。")])
         False -> html.text("")
       },
-      ..footer,
     ],
   )
 }
@@ -121,7 +100,7 @@ pub fn zone_view(label: String, cards: List(Land), zone_class: String) -> Elemen
 pub fn graveyard_zone(cards: List(Land), active: Bool, prompt: Prompt) -> Element(Msg) {
   let cards_view =
     case prompt {
-      ChoosePlainsTarget(_) if active -> cards.render_return_hand_cards(cards, 0)
+      ChoosePlainsTarget(_) if active -> cards.render_graveyard_buttons(cards)
       _ -> cards.render_static_cards(cards)
     }
 

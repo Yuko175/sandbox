@@ -93,9 +93,15 @@ pub fn draw_turn_card(model: Model) -> Model {
 }
 
 fn repeated_deck(cycle: List(Land), times: Int, acc: List(Land)) -> List(Land) {
+  // Build the full deck by repeating `cycle` `times` times, then shuffle it.
+  let deck = build_deck(cycle, times, acc)
+  shuffle(deck, [])
+}
+
+fn build_deck(cycle: List(Land), times: Int, acc: List(Land)) -> List(Land) {
   case times {
     0 -> acc
-    _ -> repeated_deck(cycle, times - 1, append_list(cycle, acc))
+    _ -> build_deck(cycle, times - 1, append_list(cycle, acc))
   }
 }
 
@@ -103,5 +109,19 @@ fn append_list(items: List(Land), acc: List(Land)) -> List(Land) {
   case items {
     [] -> acc
     [card, ..rest] -> [card, ..append_list(rest, acc)]
+  }
+}
+
+fn shuffle(items: List(Land), acc: List(Land)) -> List(Land) {
+  case items {
+    [] -> acc
+    _ -> {
+      let len = list.length(items)
+      let index = int.random(len)
+      case rules.remove_at(items, index, 0) {
+        #(rest, Picked(card)) -> shuffle(rest, [card, ..acc])
+        _ -> shuffle(items, acc)
+      }
+    }
   }
 }

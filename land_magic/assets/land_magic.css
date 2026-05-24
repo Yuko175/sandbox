@@ -260,6 +260,10 @@ body {
   gap: 10px;
 }
 
+.hand-zone .card-row {
+  align-items: stretch;
+}
+
 .card-chip {
   display: inline-flex;
   align-items: center;
@@ -271,6 +275,32 @@ body {
   letter-spacing: 0.02em;
 }
 
+.card-chip,
+.card-chip-button {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card-chip .card-image {
+  width: 40px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.with-image .card-label {
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.card-chip-button.selected {
+  box-shadow: 0 0 0 3px rgba(130, 190, 240, 0.18);
+  border-color: rgba(130, 190, 240, 0.6);
+  background: rgba(130, 190, 240, 0.04);
+}
+
 .card-chip-button {
   appearance: none;
   cursor: pointer;
@@ -278,6 +308,40 @@ body {
   color: var(--text-primary);
   text-align: left;
   background: inherit;
+}
+
+.hand-zone .card-chip-button {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: clamp(120px, 18vw, 190px);
+  min-width: 120px;
+  max-width: 230px;
+  padding: 8px;
+  border-radius: 20px;
+}
+
+.hand-zone .card-chip-button .card-image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  height: auto;
+  border-radius: 12px;
+}
+
+.hand-zone .card-chip-button .card-label {
+  display: block;
+  padding-top: 4px;
+  text-align: center;
+}
+
+.graveyard-card-button {
+  min-width: 132px;
+  padding-right: 12px;
+}
+
+.graveyard-card-button .card-label {
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .card-chip-button:hover:not(:disabled) {
@@ -332,7 +396,14 @@ body {
 .action-grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.zone-grid-actions {
+  display: grid;
+  gap: 10px;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .action-button {
@@ -458,6 +529,31 @@ body {
   border-color: var(--land-border);
 }
 
+.card-chip.plains,
+.card-chip-button.plains {
+  background-image: url("images/plain.jpg");
+}
+
+.card-chip.island,
+.card-chip-button.island {
+  background-image: url("images/island.jpg");
+}
+
+.card-chip.swamp,
+.card-chip-button.swamp {
+  background-image: url("images/swamp.jpg");
+}
+
+.card-chip.mountain,
+.card-chip-button.mountain {
+  background-image: url("images/mountain.jpg");
+}
+
+.card-chip.forest,
+.card-chip-button.forest {
+  background-image: url("images/forest.jpg");
+}
+
 @media (max-width: 960px) {
   .app-shell {
     padding: 20px;
@@ -496,6 +592,10 @@ body {
 @media (max-width: 640px) {
   .action-grid {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .zone-grid-actions {
+    grid-template-columns: 1fr;
   }
 
   .action-button {
