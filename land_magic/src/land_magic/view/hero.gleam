@@ -6,6 +6,9 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
+/// 概要: 画面上部の概要エリアを表示します。
+/// 引数: `model` に現在のゲーム状態を渡します。
+/// 戻り値: タイトル、説明、ステータスカードをまとめた要素を返します。
 pub fn hero(model: Model) -> Element(Msg) {
   html.header(
     [attribute.classes([#("hero", True)])],

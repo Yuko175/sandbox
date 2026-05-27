@@ -6,7 +6,17 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
-pub fn player_panel(player: Player, turn: Turn, active: Bool, top: Bool, prompt: Prompt, can_play: Bool, can_draw: Bool) -> Element(Msg) {
+/// 概要: 1人分のプレイヤー盤面をまとめて表示します。
+/// 引数: `player` にプレイヤー情報を渡します。
+/// 引数: `turn` に手番を渡します。
+/// 引数: `active` に手番中かを渡します。
+/// 引数: `top` に上下位置を渡します。
+/// 引数: `prompt` に説明文の種類を渡します。
+/// 引数: `prompt_message` に追加の説明文を渡します。
+/// 引数: `can_play` に操作可否を渡します。
+/// 引数: `can_draw` に操作可否を渡します。
+/// 戻り値: プレイヤーパネル全体の要素を返します。
+pub fn player_panel(player: Player, turn: Turn, active: Bool, top: Bool, prompt: Prompt, prompt_message: String, can_play: Bool, can_draw: Bool) -> Element(Msg) {
   let counter_prompt_enabled = case prompt {
     CounterWindow(_) -> True
     CounterSelecting(_, _) -> True
@@ -15,6 +25,11 @@ pub fn player_panel(player: Player, turn: Turn, active: Bool, top: Bool, prompt:
 
   let can_counter = active && counter_prompt_enabled && rules.has_counter_cost(player.hand)
   let can_pass_counter = active && counter_prompt_enabled
+
+  let hint_text = case prompt_message {
+    "" -> common.prompt_detail(prompt)
+    _ -> prompt_message
+  }
 
   html.section(
     [
@@ -41,12 +56,7 @@ pub fn player_panel(player: Player, turn: Turn, active: Bool, top: Bool, prompt:
         html.p([], [html.text(common.zone_summary(player))]),
       ]),
       case active {
-        True ->
-          html.p(
-            [attribute.classes([#("panel-hint", True)])],
-            [html.text(common.prompt_detail(prompt))],
-          )
-
+        True -> html.p([attribute.classes([#("panel-hint", True)])], [html.text(hint_text)])
         False -> html.text("")
       },
       html.div([attribute.classes([#("zone-grid", True), #(common.player_board_class(top), True)])], [

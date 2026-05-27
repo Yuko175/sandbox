@@ -3,6 +3,9 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
+/// 概要: サイドバーにアクションログを表示します。
+/// 引数: `log` に表示したいログ一覧を渡します。
+/// 戻り値: ログ領域を含むサイドバー要素を返します。
 pub fn sidebar(log: List(String)) -> Element(Msg) {
   html.aside(
     [attribute.classes([#("sidebar", True)])],
@@ -22,6 +25,10 @@ pub fn sidebar(log: List(String)) -> Element(Msg) {
   )
 }
 
+/// 概要: ログを上から順に限界数まで要素に変換します。
+/// 引数: `log` にログ一覧を渡します。
+/// 引数: `limit` に表示件数の上限を渡します。
+/// 戻り値: 表示用のログ要素一覧を返します。
 fn render_log_items(log: List(String), limit: Int) -> List(Element(Msg)) {
   case limit {
     0 -> []

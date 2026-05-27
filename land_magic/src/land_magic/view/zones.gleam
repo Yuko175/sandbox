@@ -18,6 +18,12 @@ import lustre/element.{type Element}
 import lustre/element/html
 import lustre/event
 
+/// 概要: 手札エリアを表示します。
+/// 引数: `cards` に手札を渡します。
+/// 引数: `active` に手番中かを渡します。
+/// 引数: `prompt` に現在の操作を渡します。
+/// 引数: `playable` にプレイ可能かを渡します。
+/// 戻り値: 手札ゾーンの要素を返します。
 pub fn hand_zone(cards: List(Land), active: Bool, prompt: Prompt, playable: Bool) -> Element(Msg) {
   let cards_view =
     case prompt {
@@ -55,6 +61,10 @@ pub fn hand_zone(cards: List(Land), active: Bool, prompt: Prompt, playable: Bool
   )
 }
 
+/// 概要: 山札エリアを表示します。
+/// 引数: `cards` に山札を渡します。
+/// 引数: `can_draw` に引けるかどうかを渡します。
+/// 戻り値: 山札ゾーンの要素を返します。
 pub fn deck_zone(cards: List(Land), can_draw: Bool) -> Element(Msg) {
   let count = list.length(cards)
 
@@ -77,6 +87,11 @@ pub fn deck_zone(cards: List(Land), can_draw: Bool) -> Element(Msg) {
   )
 }
 
+/// 概要: 任意のゾーンを共通レイアウトで表示します。
+/// 引数: `label` に見出しを渡します。
+/// 引数: `cards` にカード一覧を渡します。
+/// 引数: `zone_class` に CSS クラス名を渡します。
+/// 戻り値: 共通レイアウトのゾーン要素を返します。
 pub fn zone_view(label: String, cards: List(Land), zone_class: String) -> Element(Msg) {
   html.div(
     [attribute.classes([#("zone", True), #(zone_class, True)])],
@@ -87,6 +102,11 @@ pub fn zone_view(label: String, cards: List(Land), zone_class: String) -> Elemen
   )
 }
 
+/// 概要: 墓地エリアを表示します。
+/// 引数: `cards` に墓地のカードを渡します。
+/// 引数: `active` に手番中かを渡します。
+/// 引数: `prompt` に現在の操作を渡します。
+/// 戻り値: 墓地ゾーンの要素を返します。
 pub fn graveyard_zone(cards: List(Land), active: Bool, prompt: Prompt) -> Element(Msg) {
   let plains_active =
     case prompt {
@@ -105,6 +125,12 @@ pub fn graveyard_zone(cards: List(Land), active: Bool, prompt: Prompt) -> Elemen
   )
 }
 
+/// 概要: 戦場エリアを表示します。
+/// 引数: `cards` に戦場のカードを渡します。
+/// 引数: `prompt` に現在の操作を渡します。
+/// 引数: `is_active` に自分の戦場かを渡します。
+/// 引数: `owner` に対象の手番を渡します。
+/// 戻り値: 戦場ゾーンの要素を返します。
 pub fn battlefield_zone(cards: List(Land), prompt: Prompt, is_active: Bool, owner: Turn) -> Element(Msg) {
   let elements = cards.render_static_cards(cards)
 

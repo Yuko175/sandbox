@@ -6,6 +6,9 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
+/// 概要: ゲーム画面全体を組み立てて表示します。
+/// 引数: `model` に現在のゲーム状態を渡します。
+/// 戻り値: ヘッダー、盤面、サイドバーを含む画面全体の要素を返します。
 pub fn render(model: Model) -> Element(Msg) {
   let play_enabled = case model.prompt {
     ChoosePlay -> True
@@ -34,6 +37,7 @@ pub fn render(model: Model) -> Element(Msg) {
                 model.turn == PlayerTwo,
                 True,
                 model.prompt,
+                model.prompt_message,
                 play_enabled,
                 draw_enabled,
               ),
@@ -43,6 +47,7 @@ pub fn render(model: Model) -> Element(Msg) {
                 model.turn == PlayerOne,
                 False,
                 model.prompt,
+                model.prompt_message,
                 play_enabled,
                 draw_enabled,
               ),
