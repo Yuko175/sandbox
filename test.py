@@ -3,12 +3,14 @@ def fizzbuzz():
     1から20までの数字に対してFizzBuzzルールを適用する関数。
     """
     for i in range(1, 21):
-        if i % 3 == 0 and i % 5 == 0:
-            print(f"{i}: FizzBuzz")
-        elif i % 3 == 0:
-            print(f"{i}: Fizz")
-        elif i % 5 == 0:
-            print(f"{i}: Buzz")
+        fizz = ""
+        if i % 3 == 0:
+            fizz += "Fizz"
+        if i % 5 == 0:
+            fizz += "Buzz"
+        
+        if fizz:
+            print(f"{i}: {fizz}")
         else:
             print(f"{i}: {i}")
 
