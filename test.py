@@ -1,9 +1,16 @@
-def func_b():
-    publish_article(False)
+def fizzbuzz():
+    """
+    1から20までの数字に対してFizzBuzzルールを適用する関数。
+    """
+    for i in range(1, 21):
+        if i % 3 == 0 and i % 5 == 0:
+            print(f"{i}: FizzBuzz")
+        elif i % 3 == 0:
+            print(f"{i}: Fizz")
+        elif i % 5 == 0:
+            print(f"{i}: Buzz")
+        else:
+            print(f"{i}: {i}")
 
-
-def publish_article(should_update_timestamp=True):
-    check_box_value = get_checkbox_value_from_db()
-    is_checked_update_timestamp = check_box_value.update_timestamp
-    if should_update_timestamp and is_checked_update_timestamp:
-        update_timestamp()
+if __name__ == "__main__":
+    fizzbuzz()
