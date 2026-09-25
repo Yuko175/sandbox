@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "factoryMethod"
+name = "singleton"
 version = "0.1.0"
