@@ -34,11 +34,7 @@ pub struct UserIterator<'a> {
     user_collection: &'a UserCollection,
 }
 
-impl UserIterator<'_> {
-    pub fn index(&self) -> usize {
-        self.index
-    }
-}
+impl UserIterator<'_> {}
 
 /// `Iterator` は Rust 標準ライブラリのイテレータを扱うための標準インターフェースです。
 impl Iterator for UserIterator<'_> {
