@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "factory-method-rust"
+name = "refactoring-rust"
 version = "0.1.0"
