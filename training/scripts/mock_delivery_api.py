@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 app = FastAPI(title="Delivery API Mock")
 
+# 同時実行数は外部APIの制約であるため、方式設計書記載の値に合わせる。
 MAX_CONCURRENCY = 10
 _current_requests = 0
 _counter_lock = asyncio.Lock()
@@ -27,6 +28,7 @@ async def get_delivery_status(order_id: int) -> dict[str, object] | JSONResponse
 
     try:
         await asyncio.sleep(1)
+        # 動作確認用として、常に "delivered" を返すようにしている。
         return {"order_id": order_id, "status": "delivered"}
     finally:
         async with _counter_lock:
