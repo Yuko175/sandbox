@@ -5,8 +5,8 @@ from sqlalchemy import func, select
 from order_service.database import SessionLocal, engine
 from order_service.model import Base, Order, User
 
-USER_COUNT = 100_000
-ORDER_COUNT = 2_000_000
+USER_COUNT = 100_00
+ORDER_COUNT = 100_000
 BATCH_SIZE = 5000
 
 
