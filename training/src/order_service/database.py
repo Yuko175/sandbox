@@ -4,7 +4,7 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-DATABASE_PATH = Path(__file__).resolve().parents[3] / "data" / "order.db"
+DATABASE_PATH = Path(__file__).resolve().parents[2] / "order.db"
 DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 
 DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
