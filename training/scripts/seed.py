@@ -5,8 +5,8 @@ from sqlalchemy import func, select
 from order_service.database import SessionLocal, engine
 from order_service.model import Base, Order, User
 
-USER_COUNT = 100
-ORDER_COUNT = 2000
+USER_COUNT = 100000
+ORDER_COUNT = 20000000
 
 
 def seed() -> None:
