@@ -1,3 +1,3 @@
-from .orders import OrderResponse
+from .order import OrderResponse
 
 __all__ = ["OrderResponse"]

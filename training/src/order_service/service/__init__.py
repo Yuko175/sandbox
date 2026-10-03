@@ -1,3 +1,3 @@
-from .orders import OrderService
+from .order_service import OrderService
 
 __all__ = ["OrderService"]

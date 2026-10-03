@@ -1,10 +1,12 @@
-# Order Service
+# Order Service Training
 
-注文管理サービスを題材にした研修用リポジトリです。
+注文に紐づく配送ステータスを外部配送システムから取得する。
+
+100件の配送ステータス取得要求に対する応答時間は3秒以内とする。
 
 ## セットアップ
 
-Python 3.12 以上と [uv](https://docs.astral.sh/uv/) を使用します。
+Python 3.12以上と [uv](https://docs.astral.sh/uv/) を使用します。
 
 ```bash
 uv sync
@@ -12,28 +14,47 @@ uv run python scripts/seed.py
 uv run uvicorn order_service.main:app --reload
 ```
 
-API は `http://127.0.0.1:8000/orders` で利用できます。
+Order Serviceの起動前に、別ターミナルで配送API Mockを起動します。
 
-## 課題
+```bash
+uv run python scripts/mock_delivery_api.py
+```
 
-> 最近、ユーザーから「注文データの増加に伴って注文一覧の表示時間が徐々に長くなっている」という報告がありました。
->
-> 現在は正常に表示できていますが、このままデータ量が増加すると、ユーザーの操作に影響する可能性があります。
->
-> 原因を調査し、現在の要件・設計に適合するよう改善してください。
->
-> 修正内容については、原因、対応方針、検証結果を説明できるようにしてください。
+Mockは `http://127.0.0.1:9000` で起動し、次のリクエストを受け付けます。
 
-実装を始める前に、`docs/` 配下の資料を確認してください。調査では、機能上の結果だけでなく、実行されたSQL、SQLの実行回数、処理時間を確認してください。
+```text
+GET /delivery-status/{order_id}
+```
 
-修正後は、複数のデータ量で修正前後を比較し、次の項目を説明できる状態にしてください。
+確認例:
 
-- 問題の内容
-- 調査内容
-- 解決方法
-- 設計判断
-- 現行要件との整合性
-- 検証結果
-- 不足していた情報
-- 情報源
-- 残存するリスク
+```bash
+curl http://127.0.0.1:9000/delivery-status/1
+# {"order_id":1,"status":"delivered"}
+```
+
+その後、Order Serviceを別ターミナルで起動します。
+
+```bash
+uv run uvicorn order_service.main:app --reload
+```
+
+Order Serviceは `http://127.0.0.1:8000/orders` で利用できます。
+
+```bash
+curl http://127.0.0.1:8000/orders
+```
+
+配送APIの接続先を変更する場合は、`DELIVERY_API_BASE_URL` を設定します。
+
+## 開発環境
+
+- Python
+- FastAPI
+- SQLAlchemy
+- SQLite
+- pytest
+- uv
+- VS Code
+
+詳細な要件・設計は `docs/` 配下を参照してください。

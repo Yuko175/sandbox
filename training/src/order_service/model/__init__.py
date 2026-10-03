@@ -1,3 +1,3 @@
-from .entities import Base, Order, User
+from .order import Base, Order
 
-__all__ = ["Base", "Order", "User"]
+__all__ = ["Base", "Order"]
