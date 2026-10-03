@@ -39,6 +39,18 @@ Order Serviceは `http://127.0.0.1:8000/orders` で利用できます。
 curl http://127.0.0.1:8000/orders
 ```
 
+取得件数を指定する場合は `limit` クエリパラメータを使用できます（1〜100件）。
+
+```bash
+curl "http://127.0.0.1:8000/orders?limit=20"
+```
+
+注文を1件取得する場合は、注文IDをパスに指定します。
+
+```bash
+curl http://127.0.0.1:8000/orders/1
+```
+
 配送APIの接続先を変更する場合は、`DELIVERY_API_BASE_URL` を設定します。
 
 ## 開発環境
