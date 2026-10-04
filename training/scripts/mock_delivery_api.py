@@ -5,7 +5,6 @@ from fastapi.responses import JSONResponse
 
 app = FastAPI(title="Delivery API Mock")
 
-# 同時実行数は外部APIの制約であるため、方式設計書記載の値に合わせる。
 MAX_CONCURRENCY = 10
 _current_requests = 0
 _counter_lock = asyncio.Lock()
